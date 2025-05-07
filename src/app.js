@@ -1,10 +1,17 @@
 const express = require("express");
 require("dotenv").config();
 const connectDB = require("./config/database");
+const cookieParser = require("cookie-parser");
 const auth = require("./middleware/auth");
 const authRouter = require("./routes/auth");
+
 const app = express();
-// app.use("/", auth);
+const port = process.env.PORT || 3000;
+
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(express.json());
+app.use(cookieParser());
+
 app.use("/", authRouter);
 
 app.use((err, req, res, next) => {
@@ -19,9 +26,7 @@ app.use((err, req, res, next) => {
 connectDB()
   .then(() => {
     console.log("Database connected successfully");
-    app.listen(process.env.PORT, () =>
-      console.log("Server is listining on port " + process.env.PORT)
-    );
+    app.listen(port, () => console.log("Server is listining on port " + port));
   })
   .catch((err) => {
     console.error("Database connection Failed!", err);
