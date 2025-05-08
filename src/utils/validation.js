@@ -9,4 +9,14 @@ const validateSignUpForm = (req) => {
   }
 };
 
-module.exports = { validateSignUpForm };
+const validateEditProfileData = (req) => {
+  const ALLOWED_KEYS = ["fullName", "gender"];
+  const isEditAllowed = Object.keys(req.body).every((keys) =>
+    ALLOWED_KEYS.includes(keys)
+  );
+  if (isEditAllowed) {
+    return true;
+  } else throw new Error("Invalid Allowed path");
+};
+
+module.exports = { validateSignUpForm, validateEditProfileData };
