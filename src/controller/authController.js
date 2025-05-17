@@ -30,9 +30,9 @@ const loginUser = async (req, res) => {
         const token = await user.getJWT();
         res
           .cookie("token", token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            // httpOnly: true,
+            // secure: process.env.NODE_ENV === "production",
+            // sameSite: "strict",
             maxAge: 1000 * 60 * 60 * 24,
           })
           .status(200)
@@ -55,4 +55,19 @@ const loginUser = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, loginUser };
+const logoutUser = async (req, res) => {
+  try {
+    res.clearCookie("token");
+    // res.cookie("token", null, { expires: new Date(Date.now()) });
+    res
+      .status(200)
+      .json({ success: true, message: "User logged out successfully" });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "User not got deleted: " + error.message,
+    });
+  }
+};
+
+module.exports = { registerUser, loginUser, logoutUser };

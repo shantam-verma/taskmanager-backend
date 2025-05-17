@@ -14,11 +14,12 @@ const userSchema = new Schema(
     },
     gender: {
       type: String,
-      enum: {
-        values: GENDER_ENUM,
-        message: "Invalid gender `{VALUE}`. Allowed: Male, Female, Others",
-      },
-      required: [true, "Gender is required"],
+      // enum: {
+      //   values: GENDER_ENUM,
+      //   message: "Invalid gender `{VALUE}`. Allowed: Male, Female, Others",
+      // },
+      // default: "Male",
+      // required: [true, "Gender is required"],
     },
     email: {
       type: String,
@@ -41,8 +42,6 @@ userSchema.methods.getJWT = async function () {
 
 userSchema.methods.validatePassword = async function (passwordByUser) {
   const user = this;
-  console.log("Input password:", !!passwordByUser);
-  console.log("Stored password:", !!user.password);
   const isPasswordValid = await bcrypt.compare(passwordByUser, user.password);
   return isPasswordValid;
 };
